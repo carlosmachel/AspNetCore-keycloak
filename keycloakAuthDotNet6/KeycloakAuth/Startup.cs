@@ -18,6 +18,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.IdentityModel.Logging;
 
 namespace KeycloakAuth
 {
@@ -79,7 +80,7 @@ namespace KeycloakAuth
                 //Keycloak .wellknown config origin to fetch config
                 options.MetadataAddress = Configuration.GetSection("Keycloak")["Metadata"];
                 //Require keycloak to use SSL
-                options.RequireHttpsMetadata = true;
+                options.RequireHttpsMetadata = false;
                 options.GetClaimsFromUserInfoEndpoint = true;
                 options.Scope.Add("openid");
                 options.Scope.Add("profile");
@@ -101,6 +102,8 @@ namespace KeycloakAuth
 
             });
 
+            IdentityModelEventSource.ShowPII = true;
+
             /*
              * For roles, that are defined in the keycloak, you need to use ClaimTypes.Role
              * You also need to configure keycloak, to set the correct name on each token.
@@ -112,11 +115,12 @@ namespace KeycloakAuth
              * Add to access token: True
              */
 
-            
+
             /*
              * Policy based authentication
              */
 
+            /*
             services.AddAuthorization(options =>
             {
                 //Create policy with more than one claim
@@ -131,14 +135,14 @@ namespace KeycloakAuth
                 options.AddPolicy("noaccess", policy =>
                     policy.RequireClaim(ClaimTypes.Role, "noaccess"));
             });
-
+            */
 
             /*
              * Non policy based authentication
              * Uncomment below and comment the policy section
              */
-           
-            //services.AddAuthorization();
+
+            services.AddAuthorization();
 
         }
 

@@ -46,13 +46,13 @@ namespace KeycloakAuth.Controllers
          * If nothing works, try to test just with [Authorize] to see that you can get a token from your keycloak
          */
 
-        [Authorize(Policy = "admins")]
+        [Authorize(Roles = "admins")]
         public IActionResult AuthenticationAdmin()
         {
             return View();
         }
 
-        [Authorize(Policy = "noaccess")]
+        [Authorize(Roles = "noaccess")]
         public IActionResult AuthenticationNoAccess()
         {
             //Test that your identity does not have this claim attaced
@@ -60,7 +60,7 @@ namespace KeycloakAuth.Controllers
         }
 
         //A policy was defined, so authorize must use a policy instead of a role.
-        [Authorize(Policy = "users")]
+        [Authorize(Roles = "users")]
         public async Task<IActionResult> AuthenticationAsync()
         {
 
